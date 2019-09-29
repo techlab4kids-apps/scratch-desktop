@@ -85,7 +85,7 @@ const createMainWindow = () => {
     const window = createWindow({
         width: defaultSize.width,
         height: defaultSize.height,
-        title: 'Scratch Desktop'
+        title: 'Scratch Desktop (FabLAB Sulcis release)'
     });
     const webContents = window.webContents;
 

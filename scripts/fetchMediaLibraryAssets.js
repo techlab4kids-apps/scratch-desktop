@@ -47,12 +47,14 @@ const collectAssets = function (dest) {
         } else {
             console.warn(`Sprite has no MD5 property:\n${describe(sprite)}`);
         }
-        if (sprite.json.costumes) {
-            collectSimple(sprite.json.costumes, dest, `Costume for sprite ${sprite.name}`);
-        }
-        if (sprite.json.sounds) {
-            collectSimple(sprite.json.sounds, dest, `Sound for sprite ${sprite.name}`);
-        }
+		if(sprite.json){
+			if (sprite.json.costumes) {
+				collectSimple(sprite.json.costumes, dest, `Costume for sprite ${sprite.name}`);
+			}
+			if (sprite.json.sounds) {
+				collectSimple(sprite.json.sounds, dest, `Sound for sprite ${sprite.name}`);
+			}
+		}
     });
     return dest;
 };
