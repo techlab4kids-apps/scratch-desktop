@@ -11,6 +11,7 @@ telemetry.appWasOpened();
 // const defaultSize = {width: 1096, height: 715}; // minimum
 const defaultSize = {width: 1280, height: 800}; // good for MAS screenshots
 
+//const isDevelopment = process.env.NODE_ENV !== 'production';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global window references prevent them from being garbage-collected
@@ -24,7 +25,7 @@ const createWindow = ({search = null, url = 'index.html', ...browserWindowOption
     });
     const webContents = window.webContents;
 
-    if (isDevelopment) {
+    // if (isDevelopment) {
         webContents.openDevTools();
         import('electron-devtools-installer').then(importedModule => {
             const {default: installExtension, REACT_DEVELOPER_TOOLS} = importedModule;
@@ -33,7 +34,7 @@ const createWindow = ({search = null, url = 'index.html', ...browserWindowOption
             // .then(name => console.log(`Added browser extension:  ${name}`))
             // .catch(err => console.log('An error occurred: ', err));
         });
-    }
+    // }
 
     webContents.on('devtools-opened', () => {
         window.focus();

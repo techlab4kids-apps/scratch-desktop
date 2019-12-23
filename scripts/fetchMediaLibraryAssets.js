@@ -7,6 +7,7 @@ const async = require('async');
 
 const libraries = require('./lib/libraries');
 
+//const ASSET_HOST = 'cdn.assets.scratch.mit.edu';
 const ASSET_HOST = 'cdn.assets.scratch.mit.edu';
 const NUM_SIMULTANEOUS_DOWNLOADS = 5;
 const OUT_PATH = path.resolve('static', 'assets');
@@ -63,9 +64,15 @@ const connectionPool = [];
 
 const fetchAsset = function (md5, callback) {
     const myAgent = connectionPool.pop() || new https.Agent({keepAlive: true});
+    // const getOptions = {
+    //     host: ASSET_HOST,
+    //     path: `/internalapi/asset/${md5}/get/`,
+    //     agent: myAgent
+    // };
+
     const getOptions = {
         host: ASSET_HOST,
-        path: `/internalapi/asset/${md5}/get/`,
+        path: `/static/asset/${md5}`,
         agent: myAgent
     };
     const urlHuman = `//${getOptions.host}${getOptions.path}`;

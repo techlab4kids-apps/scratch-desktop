@@ -71,6 +71,9 @@ const calculateTargets = function () {
     case 'darwin':
         // run in one pass for slightly better speed
         return ['dmg mas'];
+    case 'linux':
+        // run in one pass for slightly better speed
+        return ['AppImage'];
     }
     throw new Error(`Could not determine targets for platform: ${process.platform}`);
 };
