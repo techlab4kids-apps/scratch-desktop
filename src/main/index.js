@@ -29,14 +29,14 @@ const createWindow = ({search = null, url = 'index.html', ...browserWindowOption
     const webContents = window.webContents;
 
     // if (isDevelopment) {
-        webContents.openDevTools();
-        import('electron-devtools-installer').then(importedModule => {
-            const {default: installExtension, REACT_DEVELOPER_TOOLS} = importedModule;
-            installExtension(REACT_DEVELOPER_TOOLS);
-            // TODO: add logging package and bring back the lines below
-            // .then(name => console.log(`Added browser extension:  ${name}`))
-            // .catch(err => console.log('An error occurred: ', err));
-        });
+    //     webContents.openDevTools();
+    //     import('electron-devtools-installer').then(importedModule => {
+    //         const {default: installExtension, REACT_DEVELOPER_TOOLS} = importedModule;
+    //         installExtension(REACT_DEVELOPER_TOOLS);
+    //         // TODO: add logging package and bring back the lines below
+    //         // .then(name => console.log(`Added browser extension:  ${name}`))
+    //         // .catch(err => console.log('An error occurred: ', err));
+    //     });
     // }
 
     webContents.on('devtools-opened', () => {

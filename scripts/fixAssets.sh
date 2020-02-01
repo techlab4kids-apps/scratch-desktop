@@ -1,9 +1,19 @@
 #!/bin/sh
+
+resources=/media/fablab/dati/_sources/Scratch_3/src/scratch-desktop/static/assets
 root=/media/fablab/dati/_sources/Scratch_3/src/scratch-desktop
-source="$root/static/assets/"
+
 destination="$root/dist/linux-unpacked/resources/app/static/assets"
+destination2="$root/dist/linux-unpacked/resources/static/assets"
 
-rsync -azhv --stats --progress "$source" "$destination"
+rm -r "$destination2"
 
-destination="$root/dist/linux-unpacked/resources/static"
-#rm -r $destination
+mkdir -p "$destination2"
+
+rsync -azhv --update --info=progress2 "$resources/" "$destination2"
+
+rm -r "$destination"
+ln -s "$destination2/" "$destination"
+
+mv "$root/dist/linux-unpacked/scratch-desktop" "$root/dist/linux-unpacked/Scratch Desktop FabLAB Sulcis release.AppImage"
+chmod +x "$root/Scratch Desktop FabLAB Sulcis release.AppImage"
