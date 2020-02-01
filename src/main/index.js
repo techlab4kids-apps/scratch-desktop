@@ -21,6 +21,9 @@ const createWindow = ({search = null, url = 'index.html', ...browserWindowOption
     const window = new BrowserWindow({
         useContentSize: true,
         show: false,
+        webPreferences: {
+            nodeIntegration: true
+        },
         ...browserWindowOptions
     });
     const webContents = window.webContents;
@@ -102,8 +105,11 @@ const createMainWindow = () => {
             const extNameNoDot = extName.replace(/^\./, '');
             options.filters = [getFilterForExtension(extNameNoDot)];
         }
-        const userChosenPath = dialog.showSaveDialog(window, options);
+        const userChosenPath = dialog.showSaveDialogSync(window, options);
         if (userChosenPath) {
+            // WARNING: `setSavePath` on this item is only valid during the `will-download` event. Calling the async
+            // version of `showSaveDialog` means the event will finish before we get here, so `setSavePath` will be
+            // ignored. For that reason we need to call `showSaveDialogSync` above.
             item.setSavePath(userChosenPath);
             if (isProjectSave) {
                 const newProjectTitle = path.basename(userChosenPath, extName);
@@ -123,7 +129,7 @@ const createMainWindow = () => {
     });
 
     webContents.on('will-prevent-unload', ev => {
-        const choice = dialog.showMessageBox(window, {
+        const choice = dialog.showMessageBoxSync(window, {
             type: 'question',
             message: 'Leave Scratch?',
             detail: 'Any unsaved changes will be lost.',
@@ -147,6 +153,9 @@ const createMainWindow = () => {
 if (process.platform === 'darwin') {
     const osxMenu = Menu.buildFromTemplate(MacOSMenu(app));
     Menu.setApplicationMenu(osxMenu);
+} else {
+    // disable menu for other platforms
+    Menu.setApplicationMenu(null);
 }
 
 // quit application when all windows are closed
