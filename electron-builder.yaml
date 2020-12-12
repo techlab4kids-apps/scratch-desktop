@@ -2,8 +2,8 @@ directories:
   buildResources: buildResources
   output: dist
 appId: edu.mit.scratch.scratch-desktop
-productName: "Scratch Desktop"
-afterSign: "scripts/afterSign.js"
+productName: "Scratch 3"
+publish: # empty provider list = don't publish
 mac:
   category: public.app-category.education
   entitlements: buildResources/entitlements.mac.plist
@@ -16,10 +16,12 @@ mac:
   hardenedRuntime: true
   icon: buildResources/ScratchDesktop.icns
   provisioningProfile: embedded.provisionprofile
+  artifactName: "Scratch ${version}.${ext}"
   target:
     - dmg
     - mas
-  type: distribution
+dmg:
+  title: "Scratch ${version}"
 mas:
   category: public.app-category.education
   entitlements: buildResources/entitlements.mas.plist
@@ -28,7 +30,7 @@ mas:
   icon: buildResources/ScratchDesktop.icns
 masDev:
   type: development
-  provisioningProfile: macDeveloperThisDevice.provisionprofile
+  provisioningProfile: mas-dev.provisionprofile
 win:
   icon: buildResources/ScratchDesktop.ico
   target:
@@ -38,5 +40,7 @@ appx:
   identityName: ScratchFoundation.ScratchDesktop
   publisherDisplayName: "Scratch Foundation"
   publisher: "CN=2EC43DF1-469A-4119-9AB9-568A0A1FF65F"
+  artifactName: "Scratch ${version}.${ext}"
 nsis:
   oneClick: false # allow user to choose per-user or per-machine
+  artifactName: "Scratch ${version} Setup.${ext}"
