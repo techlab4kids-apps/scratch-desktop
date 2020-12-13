@@ -39,9 +39,10 @@ const getPlatformFlag = function () {
 
 /**
  * Run `electron-builder` once to build one or more target(s).
- * @param {string} targetGroup - the target(s) to build in this pass.
- * If the `targetGroup` is `'nsis'` then the environment must contain code-signing config (CSC_* or WIN_CSC_*).
- * If the `targetGroup` is `'appx'` then code-signing config will be stripped from the environment if present.
+ * @param {object} wrapperConfig - overall configuration object for the wrapper script.
+ * @param {object} target - the target to build in this call.
+ * If the `target.name` is `'nsis'` then the environment must contain code-signing config (CSC_* or WIN_CSC_*).
+ * If the `target.name` is `'appx'` then code-signing config will be stripped from the environment if present.
  */
 const runBuilder = function (wrapperConfig, target) {
     // the AppX build fails if CSC_* or WIN_CSC_* variables are set

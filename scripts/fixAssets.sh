@@ -15,5 +15,5 @@ rsync -azhv --update --info=progress2 "$resources/" "$destination2"
 rm -r "$destination"
 ln -s "$destination2/" "$destination"
 
-mv "$root/dist/linux-unpacked/scratch-desktop" "$root/dist/linux-unpacked/Scratch Desktop FabLAB Sulcis release.AppImage"
-chmod +x "$root/Scratch Desktop FabLAB Sulcis release.AppImage"
+mv "$root/dist/linux-unpacked/scratch-desktop" "$root/dist/linux-unpacked/Scratch3-FLS.AppImage"
+chmod +x "$root/dist/linux-unpacked/Scratch3-FLS.AppImage"

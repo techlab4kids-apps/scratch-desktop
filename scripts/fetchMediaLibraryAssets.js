@@ -9,8 +9,8 @@ const libraries = require('./lib/libraries');
 
 //const ASSET_HOST = 'cdn.assets.scratch.mit.edu';
 const ASSET_HOST = 'cdn.assets.scratch.mit.edu';
-const NUM_SIMULTANEOUS_DOWNLOADS = 5;
-const OUT_PATH = path.resolve('static', 'assets');
+const NUM_SIMULTANEOUS_DOWNLOADS = 1;
+const OUT_PATH = path.resolve('../static', 'assets');
 
 
 const describe = function (object) {
@@ -59,38 +59,63 @@ const collectAssets = function (dest) {
 
 const connectionPool = [];
 
-const fetchAsset = function (md5, callback) {
+const fetchAsset = async function (md5, callback) {
     const myAgent = connectionPool.pop() || new https.Agent({keepAlive: true});
-    // const getOptions = {
-    //     host: ASSET_HOST,
-    //     path: `/internalapi/asset/${md5}/get/`,
-    //     agent: myAgent
-    // };
-
     const getOptions = {
         host: ASSET_HOST,
-        path: `/static/asset/${md5}`,
+        path: `/internalapi/asset/${md5}/get/`,
         agent: myAgent
     };
-    const urlHuman = `//${getOptions.host}${getOptions.path}`;
-    https.get(getOptions, response => {
-        if (response.statusCode !== 200) {
-            callback(new Error(`Request failed: status code ${response.statusCode} for ${urlHuman}`));
-            return;
-        }
+    const urlHuman = `https://${getOptions.host}${getOptions.path}`;
 
-        const stream = fs.createWriteStream(path.resolve(OUT_PATH, md5), {encoding: 'binary'});
-        stream.on('error', callback);
-        response.on('data', chunk => {
-            stream.write(chunk);
-        });
-        response.on('end', () => {
+    const {createWriteStream} = require('fs');
+    const {pipeline} = require('stream');
+    const {promisify} = require('util');
+    const fetch = require('node-fetch');
+
+    const streamPipeline = promisify(pipeline);
+
+    const response = await fetch(urlHuman, getOptions);
+
+    if (!response.ok) {
+        //throw new Error(`unexpected response ${response.statusText}`)
+        //callback(new Error(`Request failed: status code ${response.statusCode} for ${urlHuman}`));
+        console.log(`Request failed: status code ${response.statusCode} for ${urlHuman}`);
+        // return;
+    }
+    else {
+        let file = createWriteStream(path.resolve(OUT_PATH, md5), {encoding: 'binary'});
+        file.on('error', function (err) {
+            console.log(err);
             connectionPool.push(myAgent);
-            stream.end();
-            console.log(`Fetched ${urlHuman}`);
-            callback();
+            file.end();
+            return;
         });
-    });
+
+        await streamPipeline(response.body, file);
+        console.log(`Fetched ${urlHuman}`);
+        connectionPool.push(myAgent);
+    }
+
+    // https.get(getOptions, response => {
+    //     if (response.statusCode !== 200) {
+    //         connectionPool.push(myAgent);
+    //         callback(new Error(`Request failed: status code ${response.statusCode} for ${urlHuman}`));
+    //         return;
+    //     }
+    //
+    //     const stream = fs.createWriteStream(path.resolve(OUT_PATH, md5), {encoding: 'binary'});
+    //     stream.on('error', callback);
+    //     response.on('data', chunk => {
+    //         stream.write(chunk);
+    //     });
+    //     response.on('end', () => {
+    //         connectionPool.push(myAgent);
+    //         stream.end();
+    //         console.log(`Fetched ${urlHuman}`);
+    //         callback();
+    //     });
+    // });
 };
 
 const fetchAllAssets = function () {
@@ -104,10 +129,10 @@ const fetchAllAssets = function () {
             console.log('Fetch succeeded.');
         }
 
-        console.log(`Shutting down ${connectionPool.length} agents.`);
-        while (connectionPool.length > 0) {
-            connectionPool.pop().destroy();
-        }
+        // console.log(`Shutting down ${connectionPool.length} agents.`);
+        // while (connectionPool.length > 0) {
+        //     connectionPool.pop().destroy();
+        // }
     });
 };
 

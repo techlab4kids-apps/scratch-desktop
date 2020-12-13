@@ -20,7 +20,7 @@
     "test": "npm run test:lint",
     "test:lint": "eslint --cache --color --ext .jsx,.js ."
   },
-	"build": {
+  "build": {
     "asar": false
   },
   "repository": {
@@ -28,6 +28,7 @@
     "url": "git+ssh://git@github.com/LLK/scratch-desktop.git"
   },
   "dependencies": {
+    "node-fetch": "^2.6.1",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
