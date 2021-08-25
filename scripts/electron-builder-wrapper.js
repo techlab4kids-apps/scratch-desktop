@@ -116,6 +116,10 @@ const calculateTargets = function (wrapperConfig) {
         windowsDirectDownload: {
             name: 'nsis:ia32',
             platform: 'win32'
+        },
+        linux: {
+            name: 'appImage',
+            platform: 'linux'
         }
     };
     const targets = [];
@@ -146,8 +150,10 @@ const calculateTargets = function (wrapperConfig) {
         break;
     case 'linux':
             // run in one pass for slightly better speed
-        targets.push(['AppImage']);
-        return ['AppImage'];
+        let target = availableTargets.linux;
+        targets.push(target);
+        // return ['AppImage'];
+        break;
     default:
         throw new Error(`Could not determine targets for platform: ${process.platform}`);
     }
