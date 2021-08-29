@@ -3,7 +3,7 @@
   "productName": "Scratch Desktop (TechLAB4Kids release)",
   "description": "Scratch 3.24.0.TL4K03 as a self-contained desktop application",
   "author": "Scratch Foundation",
-  "version": "3.24.5",
+  "version": "3.24.6",
   "license": "BSD-3-Clause",
   "scripts": {
     "clean": "rimraf ./dist",
